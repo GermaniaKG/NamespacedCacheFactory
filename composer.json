@@ -1,0 +1,58 @@
+{
+    "name": "germania-kg/namespaced-cache",
+    "description": "Factory classes for namespaced PSR-6 CacheItemPools",
+
+    "keywords": [
+    	"namespaced", "psr-6", "cache", "symfony-cache", "sqlite"
+    ],
+
+    "license": "MIT",
+
+    "authors": [{
+        "name": "Carsten Witt",
+        "email": "carsten.witt@germania-kg.com",
+        "role": "Developer"
+    }],
+    "autoload": {
+        "psr-4": {
+            "Germania\\NamespacedCache\\": "src/"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\": "tests/src"
+        }
+    },
+
+    "require": {
+        "php": "^7.3|^8.0",
+        "psr/cache": "^1.0"
+    },
+
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.12",
+        "php-coveralls/php-coveralls": "^2.0",
+        "phpunit/phpunit": "^9.0",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpstan/phpstan": "^0.12.67",
+        "symfony/cache": "^5.2"
+    },
+
+    "suggest": {
+    		"symfony/cache": "Pretty good cache library"
+    },
+
+    "scripts": {
+        "phpstan": "phpstan analyse --configuration phpstan.neon --no-progress -vvv",
+
+        "phpcs": "php-cs-fixer fix -v --diff --dry-run --allow-risky=yes src/",
+        "phpcs-apply": "php-cs-fixer fix -vv --allow-risky=yes src/",
+        "phpunit": "phpunit --coverage-text",
+
+        "test": [
+            "@phpcs",
+            "@phpunit"
+        ]
+    }
+}
