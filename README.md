@@ -154,6 +154,31 @@ $cache = $factory("my_namespace");
 
 ## Sqlite Caches
 
+### Auto-discover Symfony Cache or Stash
+
+Use this when migrating from one cache engine to another. It internally uses *SymfonySqliteCacheItemPoolFactory* or *StashSqliteCacheItemPoolFactory*, whichever library is installed.
+
+Callable class **SqliteCacheItemPoolFactory** implements *PsrCacheItemPoolFactoryInterface*. 
+
+```php
+<?php
+use Germania\NamespacedCache\SqliteCacheItemPoolFactory;
+
+# These are defaults
+$directory = getcwd(); 
+$default_lifetime = 0;
+
+$factory = new SqliteCacheItemPoolFactory($directory);
+$factory = new SqliteCacheItemPoolFactory($directory, $default_lifetime);
+
+// Psr\Cache\CacheItemPoolInterface
+$cache = $factory("my_namespace");
+
+echo get_class($cache);
+// "Stash\Pool" or 
+// "Symfony\Component\Cache\Adapter\PdoAdapter"
+```
+
 ### Symfony Cache Component
 
 Callable class **SymfonySqliteCacheItemPoolFactory** extends *SymfonyCacheItemPoolFactory* and implements *PsrCacheItemPoolFactoryInterface* and *DefaultLifeTimeAware*.
