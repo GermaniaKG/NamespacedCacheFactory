@@ -4,8 +4,7 @@ namespace Germania\NamespacedCache;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
 use Psr\Cache\CacheItemPoolInterface;
 
-class SymfonySqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface {
-
+class SymfonySqliteCacheItemPoolFactory extends SymfonyCacheItemPoolFactory {
 
     /**
      * @var string|\PDO
@@ -20,19 +19,13 @@ class SymfonySqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterf
 
 
     /**
-     * @var int
-     */
-    public $default_lifetime = 0;
-
-
-    /**
      * @param string $pdo_dsn           PDO instance, a Doctrine DBAL connection or DSN
-     * @param int    $default_lifetime  Default cache lifetime
+     * @param int    $default_lifetime  Default cache lifetime, defaults to `0` (infinity)
      */
     public function __construct( string $pdo_dsn = "sqlite::memory:", int $default_lifetime = 0)
     {
         $this->pdo_dsn = $pdo_dsn;
-        $this->default_lifetime = $default_lifetime;
+        $this->setDefaultLifetime($default_lifetime);
     }
 
 
@@ -45,6 +38,7 @@ class SymfonySqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterf
      */
     public function __invoke( string $namespace) : \Psr\Cache\CacheItemPoolInterface
     {
-        return new PdoAdapter( $this->pdo_dsn, $namespace, $this->default_lifetime, $this->adapter_options );
+        $default_lifetime = $this->getDefaultLifetime();
+        return new PdoAdapter( $this->pdo_dsn, $namespace, $default_lifetime, $this->adapter_options );
     }
 }
