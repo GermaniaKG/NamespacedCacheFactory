@@ -3,35 +3,20 @@ namespace Germania\NamespacedCache;
 
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-class SymfonyFileCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface {
+class SymfonyFileCacheItemPoolFactory extends SymfonyCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface {
+
+    use DefaultLifeTimeTrait,
+        FilesystemTrait;
 
 
     /**
-     * @var ?string
-     */
-    public $directory = null;
-
-    /**
-     * @var int
-     */
-    public $default_lifetime = 0;
-
-
-    /**
-     * Accepts two optional parameters:
-     *
-     * - Main cache directory (the application needs read-write permissions on it)
-     *   If none is specified, a directory is created inside the system temporary directory
-     * - Default cache lifetime in seconds; applied to cache items that don't define their own lifetime
-     *   0 means to store the cache items indefinitely (i.e. until the files are deleted)
-     *
-     * @param ?string  $directory         Main cache directory, defaults to current work dir.
-     * @param int      $default_lifetime  Default cache lifetime
+     * @param ?string  $directory       Main cache directory, defaults to current work dir.
+     * @param int    $default_lifetime  Default cache lifetime, defaults to `0` (infinity)
      */
     public function __construct( string $directory = null, int $default_lifetime = 0)
     {
-        $this->directory = $directory ?: getcwd();
-        $this->default_lifetime = $default_lifetime;
+        $this->setPath($directory ?: getcwd());
+        $this->setDefaultLifetime($default_lifetime);
     }
 
 
@@ -44,6 +29,9 @@ class SymfonyFileCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterfac
      */
     public function __invoke( string $namespace) : \Psr\Cache\CacheItemPoolInterface
     {
-        return new FilesystemAdapter( $namespace, $this->default_lifetime, $this->directory );
+        $default_lifetime = $this->getDefaultLifetime();
+        $path = $this->getPath();
+
+        return new FilesystemAdapter( $namespace, $default_lifetime, $path );
     }
 }
