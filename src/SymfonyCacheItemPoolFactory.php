@@ -1,7 +1,7 @@
 <?php
 namespace Germania\NamespacedCache;
 
-abstract class SymfonyCacheItemPoolFactory
+abstract class SymfonyCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface, DefaultLifeTimeAware
 {
     use DefaultLifeTimeTrait;
 

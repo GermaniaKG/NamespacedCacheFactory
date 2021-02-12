@@ -1,7 +1,7 @@
 <?php
 namespace Germania\NamespacedCache;
 
-abstract class StashCacheItemPoolFactory
+abstract class StashCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface
 {
 
 

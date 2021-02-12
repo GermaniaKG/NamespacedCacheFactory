@@ -4,9 +4,7 @@ namespace Germania\NamespacedCache;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
 use Psr\Cache\CacheItemPoolInterface;
 
-class SymfonySqliteCacheItemPoolFactory extends SymfonyCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface {
-
-    use DefaultLifeTimeTrait;
+class SymfonySqliteCacheItemPoolFactory extends SymfonyCacheItemPoolFactory {
 
     /**
      * @var string|\PDO
