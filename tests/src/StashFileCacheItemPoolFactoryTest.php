@@ -29,6 +29,4 @@ class StashFileCacheItemPoolFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(CacheItemPoolInterface::class, $result);
     }
 
-
-
 }
