@@ -11,7 +11,10 @@
 
 ```bash
 $ composer require germania-kg/namespaced-cache
+
+# One of these is required:
 $ composer require symfony/cache
+$ composer require tedivm/stash
 ```
 
 
@@ -34,7 +37,9 @@ interface PsrCacheItemPoolFactoryInterface
 
 ## Factory classes
 
-**Symfony Cache in Filesystem**
+### Caches in Filesystem
+
+#### Symfony Cache Component
 
 Callable class **SymfonyFileCacheItemPoolFactory** implements *PsrCacheItemPoolFactoryInterface:*
 
@@ -53,9 +58,28 @@ $factory = new SymfonyFileCacheItemPoolFactory($directory, $default_lifetime);
 $cache = $factory("my_namespace");
 ```
 
+#### Stash PHP Caching Library
 
+Callable class **StashFileCacheItemPoolFactory** implements *PsrCacheItemPoolFactoryInterface:*
 
-**Symfony Cache with Sqlite**
+```php
+<?php
+use Germania\NamespacedCache\StashFileCacheItemPoolFactory;
+
+# These are defaults
+$directory = getcwd(); 
+$default_lifetime = 0;
+
+$factory = new StashFileCacheItemPoolFactory();
+$factory = new StashFileCacheItemPoolFactory($directory, $default_lifetime);
+  
+// Psr\Cache\CacheItemPoolInterface
+$cache = $factory("my_namespace");
+```
+
+### Caches using Sqlite
+
+#### Symfony Cache Component
 
 Callable class **SymfonySqliteCacheItemPoolFactory** implements *PsrCacheItemPoolFactoryInterface:*
 
@@ -76,9 +100,28 @@ $cache = $factory("my_namespace");
 
 
 
-## Testing
+#### Stash PHP Caching Library
 
-Copy `phpunit.xml.dist` to `phpunit.xml` and run **PhpUnit:**
+Callable class **StashSqliteCacheItemPoolFactory** implements *PsrCacheItemPoolFactoryInterface:*
+
+```php
+<?php
+use Germania\NamespacedCache\StashSqliteCacheItemPoolFactory;
+
+# These are defaults
+$directory = getcwd(); 
+$default_lifetime = 0;
+
+$factory = new StashSqliteCacheItemPoolFactory();
+$factory = new StashSqliteCacheItemPoolFactory($directory, $default_lifetime);
+  
+// Psr\Cache\CacheItemPoolInterface
+$cache = $factory("my_namespace");
+```
+
+
+
+## Testing
 
 ```bash
 $ composer phpunit
