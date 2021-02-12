@@ -86,6 +86,33 @@ if ($factory instanceOf DefaultLifeTimeAware::class) {
 
 ## Filesystem caches
 
+### Auto-discover Symfony Cache or Stash
+
+Use this when migrating from one cache engine to another. It internally uses *SymfonyFileCacheItemPoolFactory* or *StashFileCacheItemPoolFactory,* whichever library is installed.
+
+Callable class **FileCacheItemPoolFactory** implements *PsrCacheItemPoolFactoryInterface*. 
+
+```php
+<?php
+use Germania\NamespacedCache\FileCacheItemPoolFactory;
+
+# These are defaults
+$directory = getcwd(); 
+$default_lifetime = 0;
+
+$factory = new FileCacheItemPoolFactory();
+$factory = new FileCacheItemPoolFactory($directory, $default_lifetime);
+
+// Psr\Cache\CacheItemPoolInterface
+$cache = $factory("my_namespace");
+
+echo get_class($cache);
+// "Stash\Pool" or 
+// "Symfony\Component\Cache\Adapter\FilesystemAdapter"
+```
+
+
+
 ### Symfony Cache Component
 
 Callable class **SymfonyFileCacheItemPoolFactory** extends *SymfonyCacheItemPoolFactory* and implements *PsrCacheItemPoolFactoryInterface* and *DefaultLifeTimeAware*:

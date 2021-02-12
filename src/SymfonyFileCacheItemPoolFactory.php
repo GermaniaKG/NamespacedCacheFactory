@@ -1,7 +1,7 @@
 <?php
 namespace Germania\NamespacedCache;
 
-use Symfony\Component\Cache\Adapter\FilesystemAdapter ;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class SymfonyFileCacheItemPoolFactory extends SymfonyCacheItemPoolFactory {
 
