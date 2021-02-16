@@ -27,7 +27,7 @@ trait DefaultLifeTimeTrait
      *
      * @param int|null $lifetime Default cache item lifetime
      */
-    public function setDefaultLifetime( ?int $lifetime) : static
+    public function setDefaultLifetime( ?int $lifetime)
     {
         $this->default_lifetime = $lifetime;
         return $this;

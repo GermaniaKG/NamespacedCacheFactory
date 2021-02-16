@@ -27,7 +27,7 @@ trait FilesystemTrait
      *
      * @param string $directory
      */
-    public function setPath( string $path) : static
+    public function setPath( string $path)
     {
         $this->path = $path;
         return $this;
