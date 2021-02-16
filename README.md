@@ -64,7 +64,7 @@ interface DefaultLifeTimeAware
      *
      * @param int|null $lifetime Default cache item lifetime
      */
-    public function setDefaultLifetime( ?int $lifetime) : static;
+    public function setDefaultLifetime( ?int $lifetime);
 }
 
 ```

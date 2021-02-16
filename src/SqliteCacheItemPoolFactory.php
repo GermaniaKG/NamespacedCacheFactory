@@ -62,7 +62,7 @@ class SqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface
     /**
      * @param \Germania\NamespacedCache\PsrCacheItemPoolFactoryInterface
      */
-    public function setCacheItemPoolFactory( PsrCacheItemPoolFactoryInterface $factory ) : static
+    public function setCacheItemPoolFactory( PsrCacheItemPoolFactoryInterface $factory )
     {
         $this->factory = $factory;
         return $this;
