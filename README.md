@@ -82,6 +82,20 @@ if ($factory instanceOf DefaultLifeTimeAware::class) {
 }
 ```
 
+## Auto-discovering 
+
+Abstract class **PsrCacheItemPoolFactory** provides a static *autodiscover* method which will create **SQLite** or Filesystem **cache** factory, depending on if SQLite being available.
+
+*This is an experimental feature.*
+
+```php
+<?php
+use Germania\NamespacedCache\PsrCacheItemPoolFactory;
+
+$factory = PsrCacheItemPoolFactory::autodiscover($path);
+$factory = PsrCacheItemPoolFactory::autodiscover($path, $default_lifetime);
+```
+
 
 
 ## Filesystem caches
