@@ -1,6 +1,7 @@
 <?php
 namespace Germania\NamespacedCache;
 
+use Germania\NamespacedCache\Exceptions;
 use Stash\Driver\Sqlite as StashSqlite;
 use Symfony\Component\Cache\Adapter\PdoAdapter as SymfonySqlite;
 
@@ -30,7 +31,7 @@ class SqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface
         if (static::$cache_engine == "symfony"
         or (static::$cache_engine == "auto" and class_exists(SymfonySqlite::class))) {
             if (!$this->isSqliteDsnString($dsn_or_path)) {
-                throw new \UnexpectedValueException("Symfony Cache requires a SQlite DSN string");
+                throw new Exceptions\SQliteDsnRequired("Symfony Cache requires a SQlite DSN string");
             }
             $factory = new SymfonySqliteCacheItemPoolFactory($dsn_or_path, $default_lifetime);
         }
