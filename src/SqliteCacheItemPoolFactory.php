@@ -31,7 +31,8 @@ class SqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface
         if (static::$cache_engine == "symfony"
         or (static::$cache_engine == "auto" and class_exists(SymfonySqlite::class))) {
             if (!$this->isSqliteDsnString($dsn_or_path)) {
-                throw new Exceptions\SQliteDsnRequired("Symfony Cache requires a SQlite DSN string");
+                $msg = sprintf("SQlite DSN string required for Symfony Cache, instead got this: '%'", $dsn_or_path);
+                throw new Exceptions\SQliteDsnRequired($msg);
             }
             $factory = new SymfonySqliteCacheItemPoolFactory($dsn_or_path, $default_lifetime);
         }
@@ -39,7 +40,8 @@ class SqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface
         or (static::$cache_engine == "auto" and class_exists(StashSqlite::class))) {
 
             if ($this->isSqliteDsnString($dsn_or_path)) {
-                throw new \UnexpectedValueException("Stash Cache requires a directory path to store the sqlite file");
+                $msg = sprintf("Stash Cache requires a directory path to store the sqlite file, instead got this'%'", $dsn_or_path);
+                throw new \UnexpectedValueException($msg);
             }
             $factory = new StashSqliteCacheItemPoolFactory($dsn_or_path);
         }
@@ -69,6 +71,13 @@ class SqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface
         return $this;
     }
 
+
+    /**
+     * Check if a string is a SQlite DSN, i.e. if it begins with "sqlite:"
+     *
+     * @param  string  $dsn_or_path
+     * @return boolean
+     */
     protected function isSqliteDsnString( string $dsn_or_path) : bool
     {
         $len = strlen("sqlite:");
