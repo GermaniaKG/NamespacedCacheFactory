@@ -21,32 +21,23 @@ class SqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface
 
 
     /**
-     * @param string $dsn_or_path     Sqlite path or DSN, defaults to current work dir.
+     * @param string $dsn_or_directory       Sqlite path or DSN
      * @param int    $default_lifetime  Default cache lifetime, defaults to `0` (infinity)
      *
      * @throws RuntimeException         when neither Stash or Symfony Cache is installed.
      */
-    public function __construct(  string $dsn_or_path, int $default_lifetime = 0)
+    public function __construct(  string $dsn_or_directory, int $default_lifetime = 0)
     {
         if (static::$cache_engine == "symfony"
         or (static::$cache_engine == "auto" and class_exists(SymfonySqlite::class))) {
-            if (!$this->isSqliteDsnString($dsn_or_path)) {
-                $msg = sprintf("SQlite DSN string required for Symfony Cache, instead got this: '%'", $dsn_or_path);
-                throw new Exceptions\SQliteDsnRequired($msg);
-            }
-            $factory = new SymfonySqliteCacheItemPoolFactory($dsn_or_path, $default_lifetime);
+            $factory = new SymfonySqliteCacheItemPoolFactory($dsn_or_directory, $default_lifetime);
         }
         elseif (static::$cache_engine == "stash"
         or (static::$cache_engine == "auto" and class_exists(StashSqlite::class))) {
-
-            if ($this->isSqliteDsnString($dsn_or_path)) {
-                $msg = sprintf("Stash Cache requires a directory path to store the sqlite file, instead got this'%'", $dsn_or_path);
-                throw new \UnexpectedValueException($msg);
-            }
-            $factory = new StashSqliteCacheItemPoolFactory($dsn_or_path);
+            $factory = new StashSqliteCacheItemPoolFactory($dsn_or_directory);
         }
         else {
-            throw new \RuntimeException("Either Stash or Symfony Cache required.");
+            throw new \RuntimeException("Missing cache library, either Stash or Symfony Cache required.");
         }
 
         $this->setCacheItemPoolFactory($factory);
@@ -69,19 +60,6 @@ class SqliteCacheItemPoolFactory implements PsrCacheItemPoolFactoryInterface
     {
         $this->factory = $factory;
         return $this;
-    }
-
-
-    /**
-     * Check if a string is a SQlite DSN, i.e. if it begins with "sqlite:"
-     *
-     * @param  string  $dsn_or_path
-     * @return boolean
-     */
-    protected function isSqliteDsnString( string $dsn_or_path) : bool
-    {
-        $len = strlen("sqlite:");
-        return (substr(strtolower($dsn_or_path), 0, $len) === "sqlite:");
     }
 
 

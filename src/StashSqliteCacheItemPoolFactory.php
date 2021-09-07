@@ -11,6 +11,12 @@ class StashSqliteCacheItemPoolFactory extends StashCacheItemPoolFactory {
      */
     public function __construct( string $directory = null)
     {
+        $directory = $directory ?: getcwd();
+        if (!is_dir($directory)) {
+            $msg = sprintf("Stash Cache requires a directory path to store the sqlite file, instead got this: '%s'", $directory);
+            throw new \UnexpectedValueException($msg);
+        }
+
         $this->setPath($directory ?: getcwd());
     }
 
@@ -28,4 +34,5 @@ class StashSqliteCacheItemPoolFactory extends StashCacheItemPoolFactory {
         ]);
         return $driver;
     }
+
 }

@@ -14,6 +14,10 @@ class SqliteCacheItemPoolFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testInstantiation() : SqliteCacheItemPoolFactory
     {
+        $dsn_or_path = sys_get_temp_dir();
+        $sut = new SqliteCacheItemPoolFactory($dsn_or_path);
+        $this->assertInstanceOf(PsrCacheItemPoolFactoryInterface::class, $sut);
+
         $dsn_or_path = "sqlite::memory:";
         $sut = new SqliteCacheItemPoolFactory($dsn_or_path);
         $this->assertInstanceOf(PsrCacheItemPoolFactoryInterface::class, $sut);
@@ -88,7 +92,9 @@ class SqliteCacheItemPoolFactoryTest extends \PHPUnit\Framework\TestCase
         $memory_dsn = "sqlite::memory:";
 
         return array(
-            "Stash - sys_get_temp_dir()"      => [ "stash",   $tmp_dir ],
+            "Stash - sys_get_temp_dir()"      => [ "stash",       $tmp_dir ],
+            "Symfony - sys_get_temp_dir()"    => [ "symfony",     $tmp_dir ],
+            "automatic - sys_get_temp_dir()"  => [ "auto", $tmp_dir ],
             "Symfony  - $memory_dsn"          => [ "symfony", $memory_dsn ],
             "automatic - $memory_dsn"         => [ "auto",    $memory_dsn ],
         );
@@ -124,11 +130,8 @@ class SqliteCacheItemPoolFactoryTest extends \PHPUnit\Framework\TestCase
         $filedsn = "sqlite:" . sys_get_temp_dir() . "/symfony-cache.sqlite3";
 
         return array(
-            "Stash - $memory_dsn"             => [ "stash",   $memory_dsn ],
-            "Stash - $filedsn"                => [ "stash",   $filedsn ],
-            "Symfony  - sys_get_temp_dir()"   => [ "symfony", $tmp_dir ],
-            "automatic - sys_get_temp_dir()"  => [ "auto",    $tmp_dir ],
-
+            "Stash - $memory_dsn" => [ "stash",   $memory_dsn ],
+            "Stash - $filedsn"    => [ "stash",   $filedsn ],
         );
     }
 
