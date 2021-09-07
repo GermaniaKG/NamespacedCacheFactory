@@ -92,8 +92,8 @@ Abstract class **PsrCacheItemPoolFactory** provides a static *autodiscover* meth
 <?php
 use Germania\NamespacedCache\PsrCacheItemPoolFactory;
 
-$factory = PsrCacheItemPoolFactory::autodiscover($path);
-$factory = PsrCacheItemPoolFactory::autodiscover($path, $default_lifetime);
+$factory = PsrCacheItemPoolFactory::autodiscover($dsn_or_path);
+$factory = PsrCacheItemPoolFactory::autodiscover($dsn_or_path, $default_lifetime);
 ```
 
 
