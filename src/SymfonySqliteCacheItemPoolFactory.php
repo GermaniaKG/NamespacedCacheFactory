@@ -19,12 +19,15 @@ class SymfonySqliteCacheItemPoolFactory extends SymfonyCacheItemPoolFactory {
 
 
     /**
-     * @param string $pdo_dsn           PDO instance, a Doctrine DBAL connection or DSN
+     * @param string $dsn_or_directory  PDO instance, a Doctrine DBAL connection or DSN
      * @param int    $default_lifetime  Default cache lifetime, defaults to `0` (infinity)
      */
-    public function __construct( string $pdo_dsn = "sqlite::memory:", int $default_lifetime = 0)
+    public function __construct( string $dsn_or_directory = "sqlite::memory:", int $default_lifetime = 0)
     {
-        $this->pdo_dsn = $pdo_dsn;
+        if (!$this->isSqliteDsnString($dsn_or_directory)) {
+            $dsn_or_directory = $this->convertDirectoryToSqliteDsn($dsn_or_directory);
+        }
+        $this->pdo_dsn = $dsn_or_directory;
         $this->setDefaultLifetime($default_lifetime);
     }
 
@@ -40,5 +43,31 @@ class SymfonySqliteCacheItemPoolFactory extends SymfonyCacheItemPoolFactory {
     {
         $default_lifetime = $this->getDefaultLifetime();
         return new PdoAdapter( $this->pdo_dsn, $namespace, $default_lifetime, $this->adapter_options );
+    }
+
+
+
+    /**
+     * Check if a string is a SQlite DSN, i.e. if it begins with "sqlite:"
+     *
+     * @param  string  $directory
+     * @return boolean
+     */
+    protected function isSqliteDsnString( string $directory) : bool
+    {
+        $len = strlen("sqlite:");
+        return (substr(strtolower($directory), 0, $len) === "sqlite:");
+    }
+
+
+    protected function convertDirectoryToSqliteDsn( string $directory ) : string
+    {
+        if (!is_dir($directory)) {
+            $msg = sprintf("Not a directory: '%s'", $directory);
+            throw new \RuntimeException($msg);
+        }
+
+        $tpl = "sqlite:%s/cache.sqlite";
+        return sprintf($tpl, $directory);
     }
 }

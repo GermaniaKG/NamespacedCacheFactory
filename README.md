@@ -174,16 +174,21 @@ Use this when migrating from one cache engine to another. It internally uses *Sy
 
 Callable class **SqliteCacheItemPoolFactory** implements *PsrCacheItemPoolFactoryInterface*. 
 
+**Please note:**
+
+- Symfony/Cache requires a DSN string
+- Stash/Cache requires a directory.
+
 ```php
 <?php
 use Germania\NamespacedCache\SqliteCacheItemPoolFactory;
 
 # These are defaults
-$directory = getcwd(); 
+$directory_or_dsn = getcwd(); 
 $default_lifetime = 0;
 
-$factory = new SqliteCacheItemPoolFactory($directory);
-$factory = new SqliteCacheItemPoolFactory($directory, $default_lifetime);
+$factory = new SqliteCacheItemPoolFactory($directory_or_dsn);
+$factory = new SqliteCacheItemPoolFactory($directory_or_dsn, $default_lifetime);
 
 // Psr\Cache\CacheItemPoolInterface
 $cache = $factory("my_namespace");
@@ -202,12 +207,14 @@ Callable class **SymfonySqliteCacheItemPoolFactory** extends *SymfonyCacheItemPo
 use Germania\NamespacedCache\SymfonySqliteCacheItemPoolFactory;
 
 # These are defaults
-$pdo_dsn = "sqlite::memory:"; 
+$dsn_or_directory = "sqlite::memory:"; 
+$dsn_or_directory = "sqlite:/path/to/mydb.sq3";
+$dsn_or_directory = "/tmp";
 $default_lifetime = 0;
 
 $factory = new SymfonySqliteCacheItemPoolFactory();
-$factory = new SymfonySqliteCacheItemPoolFactory($pdo_dsn, $default_lifetime);
-$factory = (new SymfonySqliteCacheItemPoolFactory($pdo_dsn))
+$factory = new SymfonySqliteCacheItemPoolFactory($dsn_or_directory, $default_lifetime);
+$factory = (new SymfonySqliteCacheItemPoolFactory($dsn_or_directory))
            ->setDefaultLifetime( 3600 );
 
 // Psr\Cache\CacheItemPoolInterface
